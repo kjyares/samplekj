@@ -6,6 +6,12 @@
 
 package main;
 
+import config.config;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Randell
@@ -31,11 +37,11 @@ public class registerpage extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        name = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        password = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -68,17 +74,17 @@ public class registerpage extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel2.setText("Name:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 90, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 200, -1));
+        jPanel1.add(name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 200, -1));
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel3.setText("Eamil:");
+        jLabel3.setText("Email");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 60, -1));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 200, -1));
+        jPanel1.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 200, -1));
 
         jLabel4.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel4.setText("Password:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, 80, -1));
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 200, -1));
+        jPanel1.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 200, -1));
 
         jButton1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton1.setText("CONFIRM");
@@ -97,8 +103,24 @@ public class registerpage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         loginpage lf = new loginpage();
+        String url = "jdbc:sqlite:C:/path/to/your/sampledb.db"; 
+
+try (Connection conn = DriverManager.getConnection(url)) {
+    if (conn != null) {
+        System.out.println("Connected to the database!");
+        // Your SQL queries go here (INSERT for register, SELECT for login)
+    }
+} catch (SQLException e) {
+    System.out.println(e.getMessage());
+}
+        
         lf.setVisible(true);
         this.dispose();
+        config con = new config ();
+        String sql = "INSERT INTO tble_user (name, email, password) VALUES (?,?,?)";
+        con.addRecord(sql ,name.getText(),email.getText(),password.getText());
+             
+                JOptionPane.showMessageDialog(null, "RECORD ADDED!");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -137,6 +159,7 @@ public class registerpage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField email;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -145,9 +168,8 @@ public class registerpage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField name;
+    private javax.swing.JTextField password;
     // End of variables declaration//GEN-END:variables
 
 }
