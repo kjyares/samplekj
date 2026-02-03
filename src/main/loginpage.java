@@ -5,6 +5,7 @@
  */
 package main;
 
+import admin.admindashboard;
 import config.config;
 import javax.swing.JOptionPane;
 
@@ -34,9 +35,9 @@ public class loginpage extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        em = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        ps = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
@@ -58,12 +59,12 @@ public class loginpage extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel2.setText("Email:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 70, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 190, -1));
+        jPanel1.add(em, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 190, -1));
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel3.setText("Password:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 100, -1));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 190, -1));
+        jPanel1.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 190, -1));
 
         jButton1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton1.setText("CONFIRM");
@@ -90,10 +91,28 @@ public class loginpage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         JOptionPane.showMessageDialog(null, "LOGIN SUCCESSFULL!");
+        config con = new config ();
+        String sql = "SELECT * FROM tbl_admin WHERE a_email = ? AND a_password = ?";
+        String accounType;
         
-        this.dispose();
+        String String = accounType = con.authenticate(sql, em.getText(), ps.getText());
+        if(accounType != null){ 
+           
+            if ("ADMIN".equals(accounType)) {
+                admindashboard ad = new admindashboard();
+                ad.setVisible(true);
+                this.dipose();
+            }else{
+                 JOptionPane.showMessageDialog(null, "INVALID ACCOUNT TYPE!");
+                 return;
+            }
+            this.dispose();
+        }else{ 
+        JOptionPane.showMessageDialog(null, "INVALID CREDENTIALS/ ACCOUNT INACTIVE   !");
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
     registerpage lg = new registerpage();
@@ -139,6 +158,7 @@ public class loginpage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField em;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -146,7 +166,10 @@ public class loginpage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField ps;
     // End of variables declaration//GEN-END:variables
+
+    private void dipose() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
