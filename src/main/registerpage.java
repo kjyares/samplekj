@@ -102,59 +102,47 @@ public class registerpage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        loginpage lf = new loginpage();
-        String url = "jdbc:sqlite:C:/path/to/your/sampledb.db"; 
-
-try (Connection conn = DriverManager.getConnection(url)) {
-    if (conn != null) {
-        System.out.println("Connected to the database!");
-        // Your SQL queries go here (INSERT for register, SELECT for login)
+         String username = name.getText();
+    String emailAddr = email.getText();
+    String pass = password.getText();
+               if (username.isEmpty() || emailAddr.isEmpty() || pass.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please fill all fields!");
+        return;
+            }
+               String[] options = {"User", "Admin"};
+    String role = (String) JOptionPane.showInputDialog(
+            this,
+            "Select role for this account:",
+            "Choose Role",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0] // default selection
+    );
+    if (role == null) { // user canceled
+        JOptionPane.showMessageDialog(this, "Registration canceled.");
+        return;
     }
-} catch (SQLException e) {
-    System.out.println(e.getMessage());
-}
-        
-        lf.setVisible(true);
+config con = new config();
+    String sql = "INSERT INTO tble_user(name, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
+    con.addRecord(sql, username, emailAddr, pass, role, "Inactive");
+
+    JOptionPane.showMessageDialog(this, "User registered successfully as " + role + "!");
+
+        // Open login page
+        loginpage login = new loginpage();
+        login.setVisible(true);
         this.dispose();
-        config con = new config ();
-        String sql = "INSERT INTO tble_user (name, email, password) VALUES (?,?,?)";
-        con.addRecord(sql ,name.getText(),email.getText(),password.getText());
-             
-                JOptionPane.showMessageDialog(null, "RECORD ADDED!");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(registerpage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(registerpage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(registerpage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(registerpage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(() -> {
+            new registerpage().setVisible(true);
                 new registerpage().setVisible(true);
-            }
+            
         });
     }
 

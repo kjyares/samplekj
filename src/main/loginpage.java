@@ -6,6 +6,7 @@
 package main;
 
 import admin.admindashboard;
+import admin.userdashboard;
 import config.config;
 import javax.swing.JOptionPane;
 
@@ -91,32 +92,36 @@ public class loginpage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         JOptionPane.showMessageDialog(null, "LOGIN SUCCESSFULL!");
-        config con = new config ();
-        String sql = "SELECT * FROM tbl_admin WHERE a_email = ? AND a_password = ?";
-        String accounType;
+         String email = em.getText().trim();
+         String password = ps.getText().trim();
+         if (email.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter email and password!");
+        return;
+        }
         
-        String String = accounType = con.authenticate(sql, em.getText(), ps.getText());
-        if(accounType != null){ 
-           
-            if ("ADMIN".equals(accounType)) {
-                admindashboard ad = new admindashboard();
-                ad.setVisible(true);
-                this.dipose();
-            }else{
-                 JOptionPane.showMessageDialog(null, "INVALID ACCOUNT TYPE!");
-                 return;
-            }
-            this.dispose();
-        }else{ 
-        JOptionPane.showMessageDialog(null, "INVALID CREDENTIALS/ ACCOUNT INACTIVE   !");
+          config con = new config();
+          String sql = "SELECT * FROM tble_user WHERE email = ? AND passwod = ? AND status = ?";
+        
+        String accountType = con.authenticate(sql, em.getText(), ps.getText(), "Active");
+    String role = con.authenticate(email, password); // MUST match config method
+
+        if(role == null){
+            JOptionPane.showMessageDialog(this, "Invalid credentials!");
+        } else if (role.equalsIgnoreCase("admin")) {
+        JOptionPane.showMessageDialog(this, "Welcome Admin!");
+        new admindashboard().setVisible(true);
+        this.dispose();
+        } else if (role.equalsIgnoreCase("user")) {
+        JOptionPane.showMessageDialog(this, "Welcome User!");
+        new userdashboard().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
     }
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
-    registerpage lg = new registerpage();
-        lg.setVisible(true);
+    registerpage reg = new registerpage();
+        reg.setVisible(true);
         this.dispose();                  
         
         
